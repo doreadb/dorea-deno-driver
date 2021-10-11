@@ -1,3 +1,5 @@
+// deno-lint-ignore-file
+
 import { DoreaAuth } from "./auth.ts";
 
 export class DoreaClient {
@@ -12,7 +14,7 @@ export class DoreaClient {
         addr: [string, number],
         password: string,
         https?:boolean,
-        default_group?: string
+        defaultGroup?: string
     ) {
         
         if (https) {
@@ -27,8 +29,8 @@ export class DoreaClient {
         this.token = null;
 
         // 默认组信息
-        if(default_group) {
-            this.groupName = default_group;
+        if(defaultGroup) {
+            this.groupName = defaultGroup;
         } else {
             this.groupName = "default";
         }
@@ -56,25 +58,52 @@ export class DoreaClient {
         this.groupName = db;
     }
 
-    public async execute(command: string) {
+    public async execute(command: string): Promise<null | string> {
         
-        if (!this.available) { return null; }
+        if (!this.available) { throw new Error("Client connection failed"); }
 
         const url = this.serviceUrl + "/@" + this.groupName + "/execute";
 
-        const headers = new Headers();
-        headers.append("Authorization", "bearer " + this.token["token"]);
+        const headers = new Headers({
+            Authorization: "Bearer " + this.token["token"]
+        });
 
-        await fetch(
+        const response = await fetch(
             url,
             {
                 method: "POST",
                 headers: headers,
                 body: new URLSearchParams({
-                    "query": command
+                    "query": command,
+                    "style": "json"
                 })
             }
         );
+
+        // 过期自动尝试重新获取
+        if (response.status == 401) {
+            const auth = new DoreaAuth(this.serviceUrl, this.servicePassword);
+            const newToken = await auth.getToken();
+            if (newToken != null) {
+                this.token = newToken;
+                return this.execute(command);
+            }
+            return null;
+        }
+
+        if (!response.ok) {
+            return null;
+        } else {
+            try {
+                const json = await response.json();
+                if (json["alpha"] != "OK") {
+                    return null;
+                }
+                return json["data"]["reply"];
+            } catch(_) {
+                return null;
+            }
+        }
     }
 
 }

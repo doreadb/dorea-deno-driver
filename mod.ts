@@ -7,4 +7,5 @@ const client = new DoreaClient(
 
 if (await client.connect()) {
     console.log("连接成功！");
+    console.log(await client.execute("get foo"));
 }
