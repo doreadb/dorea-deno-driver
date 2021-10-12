@@ -58,6 +58,11 @@ export class DoreaClient {
         this.groupName = db;
     }
 
+    /**
+     * 执行某条原生 `DoreaDB` 命令
+     * @param command 
+     * @returns result
+     */
     public async execute(command: string): Promise<null | string> {
         
         if (!this.available) { throw new Error("Client connection failed"); }
@@ -104,6 +109,6 @@ export class DoreaClient {
                 return null;
             }
         }
-    }
+    } 
 
 }
