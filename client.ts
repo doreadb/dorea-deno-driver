@@ -109,6 +109,5 @@ export class DoreaClient {
                 return null;
             }
         }
-    } 
-
+    }
 }
