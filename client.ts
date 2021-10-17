@@ -1,6 +1,7 @@
 // deno-lint-ignore-file
 
 import { DoreaAuth } from "./auth.ts";
+import { ObjectToType } from "./value.ts";
 
 export class DoreaClient {
     
@@ -109,5 +110,21 @@ export class DoreaClient {
                 return null;
             }
         }
+    }
+
+    public async get(key: string): Promise<any> {
+        
+        let result = await this.execute("get " + key);
+
+        // 空值返回
+        if (result == null) { return null; }
+
+        try {
+            result = ObjectToType(JSON.parse(result));
+        } catch (_) {
+            return null;
+        }
+        
+        return result;
     }
 }
