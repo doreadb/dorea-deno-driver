@@ -41,12 +41,14 @@ export function ObjectToType(value: any): any {
 
 
         } else if (key == "Dict") {
+
             const parent = value[key];
-            const result = new Map();
+            const result: {[key: string]: string} = {};
             for (const sub in parent) {
-                result.set(sub, ObjectToType(parent[sub]));
+                result[sub] = ObjectToType(parent[sub]);
             }
             return result;
+        
         }
     }
 }
