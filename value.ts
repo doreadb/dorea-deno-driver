@@ -51,8 +51,60 @@ export function ObjectToType(value: any): any {
     }
 }
 
+export function TypeToString(value: any): string {
+    if (typeof value == "string") {
+        return "\"" + value + "\"";
+    } else if (typeof value == "number") {
+        return String(value);
+    } else if (typeof value == "boolean") {
+        if (value) {
+            return "true";
+        }
+        return "false";
+    } else if (typeof value == "object") {
+        if (value instanceof Array) {
+
+            let result = "[";
+            for (const key in value) {
+                const temp = TypeToString(value[key]);
+                result += temp + ",";
+            }
+            result = result.substr(0, result.length - 1);
+            result += "]";
+            return result;
+
+        } else if (value instanceof Tuple) {
+
+            const t = value.toArray();
+
+            let result = "(";
+            for (const key in t) {
+                const temp = TypeToString(t[key]);
+                result += temp + ",";
+            }
+            result = result.substr(0, result.length - 1);
+            result += ")";
+            return result;
+            
+        } else {
+
+            let result = "{";
+            for (const key in value) {
+                const temp = TypeToString(value[key]);
+                result += "\"" + key.toString() + "\":" + temp + ",";
+            }
+            result = result.substr(0, result.length - 1);
+            result += "}";
+            return result;
+
+        }
+
+    }
+    return "";
+}
 
 export class Tuple {
+
     private items: any[];
     
     constructor(f: any,s: any) {
@@ -79,6 +131,10 @@ export class Tuple {
 
     public toString(): string {
         return "(" + this.first() + ", " + this.second() + ")";
+    }
+
+    static build(f: any, s: any): Tuple {
+        return new Tuple(f, s);
     }
 
 }

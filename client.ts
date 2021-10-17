@@ -1,7 +1,7 @@
 // deno-lint-ignore-file
 
 import { DoreaAuth } from "./auth.ts";
-import { ObjectToType } from "./value.ts";
+import { ObjectToType, TypeToString } from "./value.ts";
 
 export class DoreaClient {
     
@@ -128,7 +128,24 @@ export class DoreaClient {
         return result;
     }
 
-    public async set(key: string, value: any): Promise<boolean> {
+    public async set(key: string, value: any, expire?: number): Promise<boolean> {
+        
+        const data = TypeToString(value);
+
+        let expireTime = 0;
+        if (expire != null) {
+            expireTime = expire;
+        }
+
+        // 运行 set 语句（这里使用Base64传递数据，服务器端会自动解析）
+        let result = await this.execute("set " + key + " b:" + btoa(data) + ": " + expireTime)
+
+        console.log("set " + key + " b:" + btoa(data) + ": " + expireTime)
+
+        if (result == null) {
+            return false;
+        }
+
         return true;
     }
 }
