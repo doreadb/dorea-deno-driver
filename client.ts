@@ -146,4 +146,13 @@ export class DoreaClient {
 
         return true;
     }
+
+    public async delete(key: string): Promise<boolean> {
+        return await this.execute("delete " + key) == null;
+    }
+
+    public async clean(): Promise<boolean> {
+        return await this.execute("clean") == null;
+    }
+
 }

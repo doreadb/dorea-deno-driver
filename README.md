@@ -1,3 +1,3 @@
-# dorea-deno-driver
+# Denorea
 
 DoreaDB Deno 连接包
