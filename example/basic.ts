@@ -6,11 +6,6 @@ const client = new DoreaClient(
 );
 
 if (await client.connect()) {
-    // let result = await client.execute("get foo");
-    // if (result == null) {
-    //     result = "";
-    // }
-    // // console.log(result);
     const result = await client.get("foo");
     console.log(result);
 }

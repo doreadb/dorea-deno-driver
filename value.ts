@@ -1,4 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
+
 /**
  * DoreaDB -> Typescript
  * 类型转换包

@@ -127,4 +127,8 @@ export class DoreaClient {
         
         return result;
     }
+
+    public async set(key: string, value: any): Promise<boolean> {
+        return true;
+    }
 }
