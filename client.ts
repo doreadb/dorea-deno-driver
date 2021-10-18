@@ -151,6 +151,10 @@ export class DoreaClient {
         return await this.execute("delete " + key) == null;
     }
 
+    /**
+     * 清空所有数据信息（当前库）
+     * @returns 是否成功
+     */
     public async clean(): Promise<boolean> {
         return await this.execute("clean") == null;
     }
