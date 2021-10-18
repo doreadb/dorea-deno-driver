@@ -53,6 +53,7 @@ export class DoreaClient {
         this.available = true;
         this.token = token;
         return true;
+        
     }
 
     public select(db: string) {
