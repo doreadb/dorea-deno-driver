@@ -34,7 +34,8 @@ if (await client.connect()) {
         "dict": {"foo": "bar"},
         "list": [1,2,3,4,5,6,7,8,9,0],
         "number": 1314,
-        "boolean": false
+        "boolean": false,
+        "binary": new Binary(new Uint8Array( /* .Some Value */ ))
     };
 
 }
