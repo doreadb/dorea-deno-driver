@@ -53,7 +53,7 @@ export class DoreaClient {
         this.available = true;
         this.token = token;
         return true;
-        
+
     }
 
     public select(db: string) {
@@ -113,6 +113,11 @@ export class DoreaClient {
         }
     }
 
+    /**
+     * 
+     * @param key
+     * @returns 返回最终数据
+     */
     public async get(key: string): Promise<any> {
         
         let result = await this.execute("get " + key);
@@ -139,6 +144,7 @@ export class DoreaClient {
         }
 
         // 运行 set 语句（这里使用Base64传递数据，服务器端会自动解析）
+        // console.log("set " + key + " b:" + btoa(data) + ": " + expireTime);
         let result = await this.execute("set " + key + " b:" + btoa(data) + ": " + expireTime)
 
         if (result == null) {

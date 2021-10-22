@@ -49,6 +49,8 @@ export function ObjectToType(value: any): any {
             }
             return result;
         
+        } else if (key == "Binary") {
+            return new Binary(value[key]["data"]);
         }
     }
 }
@@ -88,6 +90,10 @@ export function TypeToString(value: any): string {
             result += ")";
             return result;
             
+        } else if (value instanceof Binary) {
+
+            return value.stringify();
+
         } else {
 
             let result = "{";
@@ -137,6 +143,28 @@ export class Tuple {
 
     static build(f: any, s: any): Tuple {
         return new Tuple(f, s);
+    }
+
+}
+
+export class Binary {
+
+    private inner: Uint8Array;
+
+    constructor (data: Uint8Array) {
+        this.inner = data;
+    }
+
+    public stringify() {
+        return "binary!(" + btoa(
+            this.inner.reduce((data, byte) => data + String.fromCharCode(byte), '')
+        ) + ")";
+    }
+
+    public static base64(value: string): Binary {
+        return new Binary(
+            Uint8Array.from(atob(value), c => c.charCodeAt(0))
+        );
     }
 
 }
